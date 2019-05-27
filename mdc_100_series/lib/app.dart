@@ -19,20 +19,37 @@ import 'login.dart';
 import 'colors.dart';
 import 'backdrop.dart';
 import 'model/product.dart';
+import 'category_menu_page.dart';
 
 import 'supplemental/cut_corners_border.dart';
 
 // TODO: Convert ShrineApp to stateful widget (104)
-class ShrineApp extends StatelessWidget {
+class ShrineApp extends StatefulWidget {
+  @override
+  _ShrineAppState createState() => _ShrineAppState();
+}
+
+class _ShrineAppState extends State<ShrineApp> {
   @override
   Widget build(BuildContext context) {
+    Category _currentCategory = Category.all;
+
+    void _onCategoryTap(Category category) {
+      setState(() {
+        _currentCategory = category;
+      });
+    }
+
     return MaterialApp(
       title: 'Shrine',
       // TODO: Change home: to a Backdrop with a HomePage frontLayer (104)
       home: Backdrop(
-        currentCategory: Category.all,
-        frontLayer: HomePage(),
-        backLayer: Container(color: kShrinePink100),
+        currentCategory: _currentCategory,
+        frontLayer: HomePage(category: _currentCategory),
+        backLayer: CategoryMenuPage(
+          currentCategory: _currentCategory,
+          onCategoryTap: _onCategoryTap,
+        ),
         frontTitle: Text('SHRINE'),
         backTitle: Text('MENU'),
       ),
